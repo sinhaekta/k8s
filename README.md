@@ -42,36 +42,24 @@ This web application displays lists of board games and their reviews. While anyo
 - Schema.sql file to customize the schema and input initial data
 - Thymeleaf Fragments to reduce redundancy of repeating HTML elements (head, footer, navigation)
 
-Architecture
+## Architecture
 
-Infrastructure:
+## Infrastructure:
+- EKS Cluster with a node group (2 nodes).
+- EC2 instances:
+  One in a public subnet running Nexus Repository and SonarQube.
+  One in a private subnet as a self-hosted runner for Azure DevOps.
 
-EKS Cluster with a node group (2 nodes).
+## CI/CD Flow:
+- SonarQube for static code analysis and code quality checks.
+- Nexus for storing the built artifacts (JAR files).
+- Azure Pipeline automates the process of building, scanning, and deploying the application.
 
-EC2 instances:
+## Application Deployment:
+- Docker: The application is packaged as a JAR, built into a Docker image, and stored in AWS ECR.
+- Kubernetes: Deployed via EKS using Kubernetes objects (Deployment, Service, Ingress).
+- Ingress routes traffic to the application via an Application Load Balancer (ALB).
 
-One in a public subnet running Nexus Repository and SonarQube.
-
-One in a private subnet as a self-hosted runner for Azure DevOps.
-
-CI/CD Flow:
-
-SonarQube for static code analysis and code quality checks.
-
-Nexus for storing the built artifacts (JAR files).
-
-Azure Pipeline automates the process of building, scanning, and deploying the application.
-
-Application Deployment:
-
-Docker: The application is packaged as a JAR, built into a Docker image, and stored in AWS ECR.
-
-Kubernetes: Deployed via EKS using Kubernetes objects (Deployment, Service, Ingress).
-
-Ingress routes traffic to the application via an Application Load Balancer (ALB).
-
-Monitoring:
-
-Prometheus collects metrics and sends them to Grafana for visualization.
-
-Alerting configured in Grafana to notify on application anomalies.
+## Monitoring:
+- Prometheus collects metrics and sends them to Grafana for visualization.
+- Alerting configured in Grafana to notify on application anomalies.
